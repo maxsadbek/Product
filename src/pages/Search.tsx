@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { searchProducts } from '@/services/api'
 import { ProductCard } from '@/components/product/ProductCard'
-import { useNavigate } from 'react-router'
+import { useNavigate, useSearchParams } from 'react-router'
 
 export const Search: React.FC = () => {
   const [query, setQuery] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [searchParams] = useSearchParams()
   const navigate = useNavigate()
+
+  // Initialize search from URL params
+  useEffect(() => {
+    const urlQuery = searchParams.get('q')
+    if (urlQuery) {
+      setQuery(urlQuery)
+      setSearchTerm(urlQuery)
+    }
+  }, [searchParams])
 
   const { data, isLoading } = useQuery({
     queryKey: ['search', searchTerm],
@@ -19,6 +29,7 @@ export const Search: React.FC = () => {
     e.preventDefault()
     if (query.trim()) {
       setSearchTerm(query)
+      navigate(`/search?q=${encodeURIComponent(query)}`)
     }
   }
 
