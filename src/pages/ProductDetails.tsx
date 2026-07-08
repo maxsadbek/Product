@@ -1,21 +1,27 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
-import { getProduct } from '@/services/api'
+import { getProduct, getProducts } from '@/services/api'
 import { useCart } from '@/store/useCart'
 import { useWishlist } from '@/store/useWishlist'
 import { Button } from '@/components/ui/Button'
+import { ProductCard } from '@/components/product/ProductCard'
 import toast from 'react-hot-toast'
 
 export const ProductDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const [quantity, setQuantity] = useState(1)
-  const [activeImage, setActiveImage] = useState(0)
 
   const { data: product, isLoading, isError } = useQuery({
     queryKey: ['product', id],
     queryFn: () => getProduct(Number(id)),
     enabled: !!id,
+  })
+
+  const { data: relatedProducts } = useQuery({
+    queryKey: ['related-products', product?.category],
+    queryFn: () => getProducts(4, 0, product?.category),
+    enabled: !!product?.category,
   })
 
   const { addItem } = useCart()
@@ -78,26 +84,15 @@ export const ProductDetails: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16">
         {/* Product Images */}
         <div className="flex flex-col-reverse md:flex-row gap-4">
-          <div className="flex md:flex-col gap-4 overflow-x-auto md:overflow-y-auto max-h-[600px] pb-2 md:pb-0 hide-scrollbar flex-shrink-0">
-            {product.images.map((img, idx) => (
-              <button 
-                key={idx} 
-                onClick={() => setActiveImage(idx)}
-                className={`w-20 h-20 bg-gray-50 rounded-lg overflow-hidden border-2 transition-colors ${activeImage === idx ? 'border-[var(--color-primary)]' : 'border-transparent hover:border-gray-200'}`}
-              >
-                <img src={img} alt={`${product.title} ${idx}`} className="w-full h-full object-contain" />
-              </button>
-            ))}
-          </div>
           <div className="flex-grow aspect-square bg-gray-50 rounded-xl overflow-hidden flex items-center justify-center border border-gray-100">
-            <img src={product.images[activeImage] || product.thumbnail} alt={product.title} className="w-full h-full object-contain" />
+            <img src={product.image} alt={product.title} className="w-full h-full object-contain" />
           </div>
         </div>
 
         {/* Product Info */}
         <div className="flex flex-col pt-2">
           <div className="mb-2 text-[var(--color-accent)] font-medium text-sm tracking-wider uppercase">
-            {product.brand || product.category}
+            {product.category}
           </div>
           <h1 className="text-3xl sm:text-4xl font-bold text-[var(--color-primary)] tracking-tight mb-4">
             {product.title}
@@ -106,10 +101,10 @@ export const ProductDetails: React.FC = () => {
           <div className="flex items-center mb-6">
             <div className="flex items-center text-[var(--color-accent)]">
               {[...Array(5)].map((_, i) => (
-                <i key={i} className={i < Math.floor(product.rating) ? "ri-star-fill" : "ri-star-line"}></i>
+                <i key={i} className={i < Math.floor(product.rating.rate) ? "ri-star-fill" : "ri-star-line"}></i>
               ))}
             </div>
-            <span className="ml-2 text-sm text-gray-500">({product.rating} Rating)</span>
+            <span className="ml-2 text-sm text-gray-500">({product.rating.rate} Rating, {product.rating.count} reviews)</span>
           </div>
 
           <div className="text-3xl font-semibold text-[var(--color-primary)] mb-8">
@@ -149,11 +144,30 @@ export const ProductDetails: React.FC = () => {
           </div>
 
           <div className="text-sm text-gray-500">
-            <p className="mb-2"><span className="text-[var(--color-primary)] font-medium">Availability:</span> {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}</p>
             <p><span className="text-[var(--color-primary)] font-medium">Shipping:</span> Usually ships within 24 hours.</p>
           </div>
         </div>
       </div>
+
+      {/* Related Products */}
+      {relatedProducts && relatedProducts.products.length > 0 && (
+        <section className="mt-24">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-2xl font-bold text-[var(--color-primary)] tracking-tight">You May Also Like</h2>
+            <Link to="/products" className="text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors group">
+              View All <i className="ri-arrow-right-line ml-1 group-hover:translate-x-1 transition-transform"></i>
+            </Link>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {relatedProducts.products
+              .filter(p => p.id !== product?.id)
+              .slice(0, 4)
+              .map((relatedProduct) => (
+                <ProductCard key={relatedProduct.id} product={relatedProduct} />
+              ))}
+          </div>
+        </section>
+      )}
     </div>
   )
 }

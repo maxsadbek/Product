@@ -4,6 +4,14 @@ import { Home } from '@/pages/Home'
 import { Products } from '@/pages/Products'
 import { ProductDetails } from '@/pages/ProductDetails'
 import { Cart } from '@/pages/Cart'
+import { About } from '@/pages/About'
+import { Contact } from '@/pages/Contact'
+import { Wishlist } from '@/pages/Wishlist'
+import { Search } from '@/pages/Search'
+import { Checkout } from '@/pages/Checkout'
+import { OrderConfirmation } from '@/pages/OrderConfirmation'
+import { Login } from '@/pages/Login'
+import { Register } from '@/pages/Register'
 
 export default function AppRoutes() {
   return (
@@ -13,8 +21,16 @@ export default function AppRoutes() {
         <Route path="/products" element={<Products />} />
         <Route path="/products/:id" element={<ProductDetails />} />
         <Route path="/cart" element={<Cart />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/wishlist" element={<Wishlist />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/checkout" element={<Checkout />} />
+        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
         
-        {/* Placeholder for other routes like /wishlist, /login */}
+        {/* Placeholder for other routes */}
         
         <Route path="*" element={
           <div className="flex-grow flex flex-col items-center justify-center p-8 text-center min-h-[60vh]">

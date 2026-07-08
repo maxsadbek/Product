@@ -3,61 +3,49 @@ import { Link } from 'react-router'
 
 export const Footer: React.FC = () => {
   return (
-    <footer className="bg-white border-t border-gray-200 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          <div className="col-span-1 md:col-span-1">
-             <Link to="/" className="text-xl font-bold tracking-tight text-[var(--color-primary)] uppercase flex items-center mb-4">
-               <i className="ri-box-3-fill mr-2 text-[var(--color-accent)]"></i>
-               Luxe
+    <footer className="mt-auto border-t border-gray-200 bg-white">
+      <div className="section-shell py-12">
+        <div className="grid gap-8 md:grid-cols-3 lg:grid-cols-4">
+          <div>
+            <Link to="/" className="mb-4 inline-block text-lg font-semibold tracking-wide text-gray-900">
+              STORE
             </Link>
-            <p className="text-sm text-gray-500 max-w-xs text-balance">
-              Premium e-commerce platform offering the finest selection of products with uncompromising quality.
+            <p className="mb-5 max-w-sm text-sm leading-relaxed text-gray-600">
+              Clean, minimal design for modern shopping.
             </p>
           </div>
-          
+
           <div>
-            <h4 className="font-semibold text-[var(--color-primary)] mb-4">Shop</h4>
-            <ul className="space-y-3">
-              <li><Link to="/products" className="text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors">All Products</Link></li>
-              <li><Link to="/categories" className="text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors">Categories</Link></li>
-              <li><Link to="/products?sort=new" className="text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors">New Arrivals</Link></li>
+            <h4 className="mb-4 text-sm font-semibold text-gray-900">Shop</h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><Link to="/products" className="transition-colors hover:text-gray-900">All Products</Link></li>
+              <li><Link to="/wishlist" className="transition-colors hover:text-gray-900">Wishlist</Link></li>
+              <li><Link to="/cart" className="transition-colors hover:text-gray-900">Cart</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-[var(--color-primary)] mb-4">Support</h4>
-            <ul className="space-y-3">
-              <li><Link to="/faq" className="text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors">FAQ</Link></li>
-              <li><Link to="/shipping" className="text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors">Shipping & Returns</Link></li>
-              <li><Link to="/contact" className="text-sm text-gray-500 hover:text-[var(--color-primary)] transition-colors">Contact Us</Link></li>
+            <h4 className="mb-4 text-sm font-semibold text-gray-900">Company</h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><Link to="/about" className="transition-colors hover:text-gray-900">About</Link></li>
+              <li><Link to="/contact" className="transition-colors hover:text-gray-900">Contact</Link></li>
             </ul>
           </div>
 
           <div>
-            <h4 className="font-semibold text-[var(--color-primary)] mb-4">Newsletter</h4>
-            <p className="text-sm text-gray-500 mb-4">Subscribe to receive updates, access to exclusive deals, and more.</p>
-            <form className="flex" onSubmit={(e) => e.preventDefault()}>
-              <input 
-                type="email" 
-                placeholder="Enter your email" 
-                className="flex-grow px-3 py-2 text-sm border border-gray-200 focus:outline-none focus:border-[var(--color-primary)]"
-              />
-              <button type="submit" className="bg-[var(--color-primary)] text-white px-4 py-2 text-sm font-medium hover:bg-black transition-colors">
-                Subscribe
-              </button>
-            </form>
+            <h4 className="mb-4 text-sm font-semibold text-gray-900">Legal</h4>
+            <ul className="space-y-2 text-sm text-gray-600">
+              <li><a href="#" className="transition-colors hover:text-gray-900">Privacy</a></li>
+              <li><a href="#" className="transition-colors hover:text-gray-900">Terms</a></li>
+            </ul>
           </div>
         </div>
-        <div className="border-t border-gray-100 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-xs text-gray-400">© {new Date().getFullYear()} Luxe. All rights reserved.</p>
-          <div className="flex items-center gap-4 mt-4 md:mt-0">
-            <a href="#" className="text-gray-400 hover:text-[var(--color-primary)]"><i className="ri-instagram-line text-lg"></i></a>
-            <a href="#" className="text-gray-400 hover:text-[var(--color-primary)]"><i className="ri-twitter-x-line text-lg"></i></a>
-            <a href="#" className="text-gray-400 hover:text-[var(--color-primary)]"><i className="ri-facebook-circle-line text-lg"></i></a>
-          </div>
+
+        <div className="mt-8 border-t border-gray-200 pt-6">
+          <p className="text-center text-sm text-gray-600">© {new Date().getFullYear()} Store. All rights reserved.</p>
         </div>
       </div>
     </footer>
   )
 }
+

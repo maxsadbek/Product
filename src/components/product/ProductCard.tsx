@@ -3,7 +3,6 @@ import { Link } from 'react-router'
 import type { Product } from '@/types'
 import { useCart } from '@/store/useCart'
 import { useWishlist } from '@/store/useWishlist'
-import { Button } from '@/components/ui/Button'
 import toast from 'react-hot-toast'
 
 interface ProductCardProps {
@@ -13,7 +12,7 @@ interface ProductCardProps {
 export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   const { addItem } = useCart()
   const { addItem: addWishlist, removeItem: removeWishlist, isInWishlist } = useWishlist()
-  
+
   const inWishlist = isInWishlist(product.id)
 
   const handleAddToCart = (e: React.MouseEvent) => {
@@ -34,53 +33,47 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   }
 
   return (
-    <Link 
+    <Link
       to={`/products/${product.id}`}
-      className="group relative flex flex-col bg-white rounded-xl border border-gray-100 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all duration-250 hover:border-gray-200 hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] overflow-hidden"
+      className="group flex flex-col overflow-hidden rounded-lg border border-gray-200 bg-white transition-all duration-200 hover:border-gray-400"
     >
-      <div className="relative aspect-square overflow-hidden bg-gray-50 flex items-center justify-center p-4">
-        <img 
-          src={product.thumbnail} 
+      <div className="relative flex aspect-square items-center justify-center overflow-hidden bg-gray-50 p-4">
+        <img
+          src={product.image}
           alt={product.title}
-          className="object-contain w-full h-full"
+          className="h-full w-full object-contain"
           loading="lazy"
         />
         <button
           onClick={handleToggleWishlist}
-          className="absolute top-3 right-3 z-10 p-2 rounded-full bg-white shadow-sm transition-opacity opacity-0 group-hover:opacity-100 focus:opacity-100 hover:bg-gray-50 flex items-center justify-center text-[var(--color-primary)]"
+          className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-white text-gray-400 transition-colors hover:text-red-500"
           aria-label="Toggle wishlist"
         >
-          <i className={`text-lg ${inWishlist ? 'ri-heart-3-fill text-red-500' : 'ri-heart-3-line'}`}></i>
+          <i className={`text-sm ${inWishlist ? 'ri-heart-3-fill text-red-500' : 'ri-heart-3-line'}`}></i>
         </button>
       </div>
-      
-      <div className="flex flex-col p-4 flex-grow">
-        <div className="flex justify-between items-start mb-2 gap-2">
-          <h3 className="font-medium text-[var(--color-primary)] text-sm line-clamp-2 leading-tight">
-            {product.title}
-          </h3>
-          <span className="font-semibold text-[var(--color-primary)] whitespace-nowrap">
+
+      <div className="flex flex-grow flex-col p-3">
+        <h3 className="line-clamp-2 text-xs font-medium text-gray-900">
+          {product.title}
+        </h3>
+
+        <div className="mt-auto flex items-center justify-between pt-2">
+          <span className="text-sm font-semibold text-gray-900">
             ${product.price.toFixed(2)}
           </span>
-        </div>
-        
-        <div className="flex items-center text-xs text-gray-500 mb-4 mt-auto">
-          <div className="flex items-center">
-            <i className="ri-star-fill text-[var(--color-accent)] mr-1"></i>
-            <span>{product.rating.toFixed(1)}</span>
+          <div className="flex items-center gap-1 text-xs text-gray-500">
+            <i className="ri-star-fill text-gray-400"></i>
+            <span>{product.rating.rate.toFixed(1)}</span>
           </div>
-          <span className="mx-2">•</span>
-          <span>{product.brand || product.category}</span>
         </div>
 
-        <Button 
-          variant="secondary" 
-          size="sm" 
-          className="w-full text-xs font-medium uppercase tracking-wider"
+        <button
           onClick={handleAddToCart}
+          className="mt-2 w-full rounded border border-gray-900 bg-white px-2 py-1.5 text-xs font-medium text-gray-900 transition-all hover:bg-gray-900 hover:text-white"
         >
           Add to Cart
-        </Button>
+        </button>
       </div>
     </Link>
   )

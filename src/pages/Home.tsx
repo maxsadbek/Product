@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { getProducts } from '@/services/api'
 import { ProductCard } from '@/components/product/ProductCard'
+import toast from 'react-hot-toast'
 
 export const Home: React.FC = () => {
   const { data, isLoading } = useQuery({
@@ -10,90 +11,133 @@ export const Home: React.FC = () => {
     queryFn: () => getProducts(8),
   })
 
+  const features = [
+    { icon: 'ri-truck-line', title: 'Fast Delivery', description: 'Express shipping on every order' },
+    { icon: 'ri-shield-check-line', title: 'Secure Checkout', description: 'Protected payments with full confidence' },
+    { icon: 'ri-refresh-line', title: 'Easy Returns', description: '30-day hassle-free returns' },
+    { icon: 'ri-customer-service-2-line', title: 'Support 24/7', description: 'Friendly help whenever you need it' },
+  ]
+
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="relative h-[80vh] min-h-[600px] flex items-center justify-center overflow-hidden bg-[var(--color-primary)]">
-        <div className="absolute inset-0 z-0">
-          <div className="absolute inset-0 bg-black/40 z-10"></div>
-          <img 
-            src="https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=2070&auto=format&fit=crop" 
-            alt="Hero background" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-        <div className="relative z-20 text-center px-4 max-w-4xl mx-auto flex flex-col items-center">
-          <h1 className="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 leading-tight">
-            Elevate Your <br /> Everyday
+      <section className="relative py-20 sm:py-28 lg:py-32 bg-white">
+        <div className="section-shell max-w-3xl">
+          <h1 className="mb-6 text-4xl font-semibold leading-tight tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">
+            Premium products for everyday living.
           </h1>
-          <p className="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl text-balance">
-            Discover a curated collection of premium essentials designed for the modern lifestyle. Uncompromising quality meets timeless design.
+          <p className="mb-8 max-w-2xl text-lg leading-8 text-gray-600">
+            Discover our curated collection of quality essentials designed to enhance your daily life.
           </p>
-          <Link 
-            to="/products"
-            className="inline-flex items-center justify-center bg-white text-[var(--color-primary)] px-8 py-4 text-sm font-semibold tracking-wide uppercase transition-colors hover:bg-gray-100"
-          >
-            Shop Collection
-          </Link>
+          <div className="flex flex-col gap-3 sm:flex-row">
+            <Link
+              to="/products"
+              className="inline-flex items-center justify-center rounded border border-gray-900 bg-gray-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-black"
+            >
+              Shop Collection
+            </Link>
+            <Link
+              to="/about"
+              className="inline-flex items-center justify-center rounded border border-gray-900 bg-white px-6 py-3 text-sm font-medium text-gray-900 transition-colors hover:bg-gray-50"
+            >
+              About Us
+            </Link>
+          </div>
         </div>
       </section>
 
       {/* Featured Products */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
-        <div className="flex justify-between items-end mb-12">
+      <section className="section-shell py-20 sm:py-24">
+        <div className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
           <div>
-            <h2 className="text-3xl font-bold text-[var(--color-primary)] mb-4 tracking-tight">Featured Curations</h2>
-            <p className="text-gray-500 max-w-md">Exceptional pieces selected for their outstanding craftsmanship and design.</p>
+            <h2 className="text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">Featured Products</h2>
           </div>
-          <Link to="/products" className="hidden sm:inline-flex items-center text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors group">
-            View All <i className="ri-arrow-right-line ml-1 group-hover:translate-x-1 transition-transform"></i>
+          <Link to="/products" className="inline-flex items-center text-sm font-medium text-gray-900 transition-colors hover:text-gray-600">
+            View all <i className="ri-arrow-right-line ml-2"></i>
           </Link>
         </div>
 
         {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {Array.from({ length: 8 }).map((_, i) => (
               <div key={i} className="flex flex-col gap-4">
-                <div className="aspect-square bg-gray-100 animate-pulse rounded-xl"></div>
-                <div className="h-4 bg-gray-100 animate-pulse rounded w-3/4"></div>
-                <div className="h-4 bg-gray-100 animate-pulse rounded w-1/4"></div>
+                <div className="aspect-square animate-pulse rounded bg-gray-100"></div>
+                <div className="h-4 w-3/4 animate-pulse rounded bg-gray-100"></div>
+                <div className="h-4 w-1/4 animate-pulse rounded bg-gray-100"></div>
               </div>
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {data?.products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+              <div key={product.id}>
+                <ProductCard product={product} />
+              </div>
             ))}
           </div>
         )}
       </section>
-      
-      {/* Editorial Section */}
-      <section className="bg-white py-24 border-y border-gray-100">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="aspect-[4/5] bg-gray-100 overflow-hidden">
-            <img 
-              src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop" 
-              alt="Editorial" 
-              className="w-full h-full object-cover"
+
+      {/* Features Section */}
+      <section className="border-y border-gray-200 bg-white py-20 sm:py-24">
+        <div className="section-shell">
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
+            {features.map((feature) => (
+              <div key={feature.title} className="text-center">
+                <div className="mb-4 flex justify-center">
+                  <i className={`${feature.icon} text-4xl text-gray-900`}></i>
+                </div>
+                <h3 className="mb-2 text-lg font-semibold text-gray-900">{feature.title}</h3>
+                <p className="text-sm text-gray-600">{feature.description}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* About Section */}
+      <section className="section-shell py-20 sm:py-24">
+        <div className="grid items-center gap-10 md:grid-cols-2">
+          <div className="overflow-hidden rounded bg-gray-100">
+            <img
+              src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop"
+              alt="Our Story"
+              className="h-full w-full object-cover"
             />
           </div>
-          <div className="flex flex-col justify-center max-w-lg">
-            <span className="text-[var(--color-accent)] font-medium tracking-widest uppercase text-sm mb-4">The Process</span>
-            <h2 className="text-4xl font-bold text-[var(--color-primary)] tracking-tight mb-6 leading-tight">
-              Craftsmanship <br /> Without Compromise
-            </h2>
-            <p className="text-gray-500 mb-8 leading-relaxed">
-              Every item in our collection is a testament to the dedication of skilled artisans. We believe in creating pieces that not only look beautiful but are built to last, transcending seasonal trends.
+          <div className="max-w-xl">
+            <h2 className="mb-6 text-3xl font-semibold tracking-tight text-gray-900 sm:text-4xl">Quality is our priority.</h2>
+            <p className="mb-8 text-lg leading-8 text-gray-600">
+              We carefully select every product for its lasting quality and design. Each piece is chosen to bring value and comfort to everyday life.
             </p>
-            <Link 
-              to="/about"
-              className="inline-flex items-center text-sm font-medium text-[var(--color-primary)] hover:text-[var(--color-accent)] transition-colors group self-start"
-            >
-              Read Our Story <i className="ri-arrow-right-line ml-1 group-hover:translate-x-1 transition-transform"></i>
+            <Link to="/about" className="inline-flex items-center text-sm font-medium text-gray-900 transition-colors hover:text-gray-600">
+              Learn more <i className="ri-arrow-right-line ml-2"></i>
             </Link>
           </div>
+        </div>
+      </section>
+
+      {/* Newsletter Section */}
+      <section className="section-shell py-20 sm:py-24">
+        <div className="mx-auto max-w-2xl rounded border border-gray-200 bg-white p-8 text-center sm:p-12">
+          <h2 className="mb-4 text-3xl font-semibold tracking-tight text-gray-900">Stay updated.</h2>
+          <p className="mb-8 text-lg leading-8 text-gray-600">
+            Subscribe to receive updates on new products and special offers.
+          </p>
+          <form className="flex flex-col gap-3 sm:flex-row" onSubmit={(e) => { e.preventDefault(); toast.success('Subscribed successfully!') }}>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="flex-grow rounded border border-gray-200 px-4 py-3 text-sm text-gray-900 outline-none transition-colors focus:border-gray-900"
+              required
+            />
+            <button
+              type="submit"
+              className="rounded border border-gray-900 bg-gray-900 px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-black"
+            >
+              Subscribe
+            </button>
+          </form>
         </div>
       </section>
     </div>
